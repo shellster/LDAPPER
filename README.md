@@ -154,6 +154,11 @@ Common plaintext passwords: https://www.blackhillsinfosec.com/domain-goodness-le
 Change Log
 ==========
 
+Version 1.5
+-----------
+
+1) Fix minor pagination bug that could cause some records not to be returned.
+
 Version 1.4
 -----------
 
