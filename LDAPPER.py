@@ -352,10 +352,9 @@ with ldap3.Connection(server_pool, user=r'%s\%s' % (args.domain, args.user), pas
     looptrack = ""
     
     conn.search(args.basedn, args.search, search_scope=ldap3.SUBTREE, attributes=[ldap3.ALL_ATTRIBUTES, ldap3.ALL_OPERATIONAL_ATTRIBUTES], paged_size=pagesize)
-    
-    while cookie:
-        cookie = conn.result['controls']['1.2.840.113556.1.4.319']['value']['cookie']
-        
+    cookie = conn.result['controls']['1.2.840.113556.1.4.319']['value']['cookie']
+
+    while True:
         for entry in conn.entries:
             printable_entry =json.loads(entry.entry_to_json())
             
@@ -404,8 +403,10 @@ with ldap3.Connection(server_pool, user=r'%s\%s' % (args.domain, args.user), pas
         if maxrecords != 0:
             pagesize = min((maxrecords - i), pagesize)
         
+        if not cookie:
+            break
+
         conn.search(args.basedn, args.search, search_scope=ldap3.SUBTREE, attributes=[ldap3.ALL_ATTRIBUTES, ldap3.ALL_OPERATIONAL_ATTRIBUTES], paged_size=pagesize, paged_cookie=cookie)
-        
         cookie = conn.result['controls']['1.2.840.113556.1.4.319']['value']['cookie']
 
 if i == 0:
