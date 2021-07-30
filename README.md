@@ -35,71 +35,74 @@ Installation
     
 Directions
 ==========
-    # python LDAPPER.py
-	    usage: LDAPPER.py [-h] --domain DOMAIN --user USER --password PASSWORD
-                      --server SERVER [--basedn BASEDN] --search SEARCH
-                      [--maxrecords MAXRECORDS] [--pagesize PAGESIZE]
-                      [--delay DELAY] [--format {plain,json,json_tiny}]
-                      [--encryption {1,2,3}]
-                      [--advanced [ADVANCED [ADVANCED ...]]] [--outfile OUTFILE]
-                      [attribute [attribute ...]]
+    # python3 ldapper.py
+        usage: ldapper.py [-h] --domain DOMAIN --user USER --password PASSWORD
+                          --server SERVER [--basedn BASEDN] --search SEARCH
+                          [--maxrecords MAXRECORDS] [--pagesize PAGESIZE]
+                          [--delay DELAY] [--format {plain,json,json_tiny}]
+                          [--encryption {1,2,3}]
+                          [--advanced [ADVANCED [ADVANCED ...]]] [--outfile OUTFILE]
+                          [--engine {ldap3,impacket}]
+                          [attribute [attribute ...]]
 
-    AD LDAP Command Line Searching that doesn't suck.
+        AD LDAP Command Line Searching that doesn't suck.
 
-    positional arguments:
-      attribute             Attributes to return (Defaults to all for custom query.  For canned queries, pass a "*" to get all attributes instead of default ones.)
+        positional arguments:
+          attribute             Attributes to return (Defaults to all for custom query.  For canned queries, pass a "*" to get all attributes instead of default ones.)
 
-    optional arguments:
-      -h, --help            show this help message and exit
-      --domain DOMAIN, -D DOMAIN
-                            Domain
-      --user USER, -U USER  Username
-      --password PASSWORD, -P PASSWORD
-                            Password or LM:NTLM formatted hash
-      --server SERVER, -S SERVER
-                            DC IP or resolvable name (can be comma-delimited list for round-robin)
-      --basedn BASEDN, -b BASEDN
-                            Base DN should typically be "dc=", followed by the long domain name with periods replaced with ",dc=". Will attempt to derive it if not provided from the LDAP server.
-      --search SEARCH, -s SEARCH
-                            LDAP search string or number indicating custom search from "Custom Searches" list.  Use "-" for read from stdin.
-      --maxrecords MAXRECORDS, -m MAXRECORDS
-                            Maximum records to return (Default is 100), 0 means all.
-      --pagesize PAGESIZE, -p PAGESIZE
-                            Number of records to return on each pull (Default is 10).  Should be <= max records.
-      --delay DELAY, -d DELAY
-                            Millisecond delay between paging requests (Defaults to 0).
-      --format {plain,json,json_tiny}, -f {plain,json,json_tiny}
-                            Format of output (Default is "plain"), can be: plain, json. json_tiny
-      --encryption {1,2,3}, -n {1,2,3}
-                            3) Connect to 636 TLS (Default); 2) Connect 389 No TLS, but attempt STARTTLS and fallback as needed; 1) Connect to 389, Force Plaintext
-      --advanced [ADVANCED [ADVANCED ...]], -a [ADVANCED [ADVANCED ...]]
-                            Advanced way to pass options for canned searches that prompt for additional input (for multiple prompts, pass argument in the order of prompting)
-      --outfile OUTFILE, -o OUTFILE
-                            Output File (if specified output will be routed here instead of stdout [Can prevent encoding errors in Windows])
+        optional arguments:
+          -h, --help            show this help message and exit
+          --domain DOMAIN, -D DOMAIN
+                                Domain
+          --user USER, -U USER  Username
+          --password PASSWORD, -P PASSWORD
+                                Password or LM:NTLM formatted hash
+          --server SERVER, -S SERVER
+                                DC IP or resolvable name
+          --basedn BASEDN, -b BASEDN
+                                Base DN should typically be "dc=", followed by the long domain name with periods replaced with ",dc=". Will attempt to derive it if not provided from the LDAP server.
+          --search SEARCH, -s SEARCH
+                                LDAP search string or number indicating custom search from "Custom Searches" list.  Use "-" for read from stdin.
+          --maxrecords MAXRECORDS, -m MAXRECORDS
+                                Maximum records to return (Default is 100), 0 means all.
+          --pagesize PAGESIZE, -p PAGESIZE
+                                Number of records to return on each pull (Default is 10).  Should be <= max records.
+          --delay DELAY, -d DELAY
+                                Millisecond delay between paging requests (Defaults to 0).
+          --format {plain,json,json_tiny}, -f {plain,json,json_tiny}
+                                Format of output (Default is "plain"), can be: plain, json. json_tiny
+          --encryption {1,2,3}, -n {1,2,3}
+                                3) Connect to 636 TLS (Default); 2) Connect 389 No TLS, but attempt STARTTLS and fallback as needed (not available with impacket); 1) Connect to 389, Force Plaintext
+          --advanced [ADVANCED [ADVANCED ...]], -a [ADVANCED [ADVANCED ...]]
+                                Advanced way to pass options for canned searches that prompt for additional input (for multiple prompts, pass argument in the order of prompting)
+          --outfile OUTFILE, -o OUTFILE
+                                Output File (if specified output will be routed here instead of stdout [Can prevent encoding errors in Windows])
+          --engine {ldap3,impacket}, -e {ldap3,impacket}
+                                Pick the engine to use (Defaults to "ldap3"). SEE OPSEC NOTES!
 
-    Custom Searches:
-          1) Get all users
-              1.1) Get specific user (You will be prompted for the username)
-          2) Get all groups (and their members)
-              2.1) Get specific group (You will be prompted for the group name)
-          3) Get all printers
-          4) Get all computers
-              4.1) Get specific computer (You will be prompted for the computer name)
-          5) Get Domain/Enterprise Administrators
-          6) Get Domain Trusts
-          7) Search for Unconstrained SPN Delegations (Potential Priv-Esc)
-          8) Search for Accounts where PreAuth is not required. (ASREPROAST)
-          9) Search for User SPNs (KERBEROAST)
-              9.1) Search for specific User SPN (You will be prompted for the User Principle Name)
-         10) Show All LAPS LA Passwords (that you can see)
-             10.1) Search for specific Workstation LAPS Password (You will be prompted for the Workstation Name)
-        *11) Search for common plaintext password attributes (UserPassword, UnixUserPassword, unicodePwd, and msSFU30Password)
-         12) Show All Quest Two-Factor Seeds (if you have access)
-         13) Oracle "orclCommonAttribute" SSO password hash
-        *14) Oracle "userPassword" SSO password hash
-         15) Get SCCM Servers
+        Custom Searches:
+                  1) Get all users
+                          1.1) Get specific user (You will be prompted for the username)
+                  2) Get all groups (and their members)
+                          2.1) Get specific group (You will be prompted for the group name)
+                  3) Get all printers
+                  4) Get all computers
+                          4.1) Get specific computer (You will be prompted for the computer name)
+                  5) Get Domain/Enterprise Administrators
+                  6) Get Domain Trusts
+                  7) Search for Unconstrained SPN Delegations (Potential Priv-Esc)
+                  8) Search for Accounts where PreAuth is not required. (ASREPROAST)
+                  9) Search for User SPNs (KERBEROAST)
+                          9.1) Search for specific User SPN (You will be prompted for the User Principle Name)
+                 10) Show All LAPS LA Passwords (that you can see)
+                         10.1) Search for specific Workstation LAPS Password (You will be prompted for the Workstation Name)
+                *11) Search for common plaintext password attributes (UserPassword, UnixUserPassword, unicodePwd, and msSFU30Password)
+                 12) Show All Quest Two-Factor Seeds (if you have access)
+                 13) Oracle "orclCommonAttribute" SSO password hash
+                *14) Oracle "userPassword" SSO password hash
+                 15) Get SCCM Servers
 
-    Starred items have never been tested in an environment where they could be verified, so please let me know if they work.
+        Starred items have never been tested in an environment where they could be verified, so please let me know if they work.
 
 Example
 =======
@@ -114,27 +117,27 @@ For the purposes of these examples, assume the following:
     
 Retrieve all records return only the cn attribute:
 
-    python LDAPPER.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s '(cn=*)' cn
+    python ldapper.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s '(cn=*)' cn
 
 Retrieve details about a specific user (will be prompted for username):
 
-    python LDAPPER.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s '1.1'
+    python ldapper.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s '1.1'
     
 Retrieve details about a specific user (pass username so you don't get prompted):
 
-    python LDAPPER.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s '1.1' -a 'alice'
+    python ldapper.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s '1.1' -a 'alice'
 
 Retrieve top 100 user Kerberos SPNs, no more than five at a time, with two seconds between each page request in compact JSON form:
 
-    python LDAPPER.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 100 -p 5 -d 2000 -f json_tiny -s '(&(objectcategory=user)(serviceprincipalname=*))' serviceprincipalname userprincipalname
+    python ldapper.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 100 -p 5 -d 2000 -f json_tiny -s '(&(objectcategory=user)(serviceprincipalname=*))' serviceprincipalname userprincipalname
     
 Manually retrieve all records for printers and show all related attributes:
 
-    python LDAPPER.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s '(objectClass=printQueue)'
+    python ldapper.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s '(objectClass=printQueue)'
 
 Search for Unconstrained SPN Delegations with no effort:
 
-    python LDAPPER.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s 4
+    python ldapper.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s 4
 
 
 OPSEC Warnings
