@@ -31,7 +31,7 @@ either return all attributes, or return only the ones you want.
 Installation
 ============
     git clone ...
-    pip install -r requirements.txt #python2 and python3 compatible.
+    pip install -r requirements.txt
     
 Directions
 ==========
@@ -136,6 +136,16 @@ Search for Unconstrained SPN Delegations with no effort:
 
     python LDAPPER.py -D 'EMP' -U 'bob' -P 'password' -S '10.0.0.2,10.0.0.3' -m 0  -s 4
 
+
+OPSEC Warnings
+==============
+
+1) When using the Impacket engine and not supplying a baseDN, the tool will attempt an SMB authentication and connection to the domain controller to acquire the NETBIOS name of the domain, to derive the baseDN.  This behavior may result in a detection in a highly sentive environment.  Either do not use Impacket in such an environment, or always specify the baseDN.
+
+2) Impacket will either do a full LDAPS connection or a fully unencrypted connection.  It cannot use STARTTLS at the moment, so if a plaintext LDAP connection will get caught, either only attempt a full TLS connection or do not use the Impacket engine.
+
+3) Impacket does not provide the most control around how fast records are pulled.  Therefore, the "--delay" option is only partially implemented.  If delaying record pulling is critical, do not use the Impacket engine.
+
 References
 ==========
 
@@ -154,10 +164,21 @@ Common plaintext passwords: https://www.blackhillsinfosec.com/domain-goodness-le
 Change Log
 ==========
 
+Version 1.6
+-----------
+
+1) Added Impacket as an alternative to LDAP3 because LDAP3 doesn't always work (and neither does Impacket).
+
+2) Removed multiple LDAP server selection as this feature is not really needed, and does not really exist in Impacket.
+
+3) Refactored everything.
+
+
 Version 1.5
 -----------
 
 1) Fix minor pagination bug that could cause some records not to be returned.
+
 
 Version 1.4
 -----------
@@ -177,6 +198,7 @@ Version 1.3
 2) Automatically wrap query in brackets if the user did not already do that.
 
 3) Fixed Python 2 Support Bug.
+
 
 Future Plans
 ============

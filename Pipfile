@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ldap3 = "*"
+colorama = "*"
+impacket = "==0.9.23"
+PyYAML = "*"
+pyOpenSSL = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
