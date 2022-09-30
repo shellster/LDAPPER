@@ -41,7 +41,7 @@ custom_search = [
     },
     {
      'help': 'Get all printers',
-     'ldap': '(objectCategory=printeQueue)',
+     'ldap': '(objectCategory=printQueue)',
     },
     {
      'help': 'Get all computers',
