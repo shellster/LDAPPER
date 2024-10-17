@@ -140,5 +140,10 @@ custom_search = [
      'help': 'Get SCCM Servers',
      'ldap': '(objectClass=mSSMSManagementPoint)',
      'filter': ['cn', 'mSSMSMPName', 'mSSMSCapabilities', 'mSSMSSiteCode', 'mSSMSVersion'],
+    },
+    {
+     'help': 'Search for Accounts where password is not required. (PasswordNotRequired)',
+     'ldap': '(userAccountControl:1.2.840.113556.1.4.803:=32)',
+     'filter': ['cn', 'distinguishedName']
     }
 ]
