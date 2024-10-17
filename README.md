@@ -101,6 +101,7 @@ Directions
                  13) Oracle "orclCommonAttribute" SSO password hash
                 *14) Oracle "userPassword" SSO password hash
                  15) Get SCCM Servers
+                 16) Search for Accounts where password is not required. (PasswordNotRequired)
 
         Starred items have never been tested in an environment where they could be verified, so please let me know if they work.
 
