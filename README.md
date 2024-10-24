@@ -168,6 +168,11 @@ Common plaintext passwords: https://www.blackhillsinfosec.com/domain-goodness-le
 Change Log
 ==========
 
+Version 1.7
+-----------
+
+1) Check for accounts that don't need credentials, courtesy of @nyxgeek.
+
 Version 1.6
 -----------
 
