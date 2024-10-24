@@ -171,7 +171,7 @@ Change Log
 Version 1.7
 -----------
 
-1) Check for accounts that don't need credentials, courtesy of @nyxgeek.
+1) Check for accounts that don't need passwords, courtesy of @nyxgeek.
 
 Version 1.6
 -----------
